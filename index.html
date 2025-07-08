@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: sans-serif;
-      background-image: url("background.jpg"); /* ←背景画像をここで指定！ */
+      background-image: url("background.jpg");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -25,13 +25,32 @@
       margin: 0 auto 20px;
     }
 
+    /* 最初は両方非表示 */
+    .pc-only, .mobile-only {
+      display: none;
+    }
+
+    /* PCだけ表示 */
+    @media (min-width: 769px) {
+      .pc-only {
+        display: block;
+      }
+    }
+
+    /* スマホだけ表示 */
+    @media (max-width: 768px) {
+      .mobile-only {
+        display: block;
+      }
+    }
+
     .main {
       display: flex;
       justify-content: center;
       align-items: center;
       max-width: 1000px;
       margin: 0 auto;
-      background: rgba(255, 255, 255, 0.9); /* 背景を少し透けさせる */
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       padding: 20px;
@@ -89,34 +108,62 @@
 </head>
 <body>
   <h1>期待値計算ツール</h1>
-  <div class="main">
-    <!-- 左画像 -->
-    <div class="image-side">
-      <img src="left.png" alt="左の画像" />
+
+  <!-- 💻 PC専用 -->
+  <div class="pc-only">
+    <div class="main">
+      <div class="image-side">
+        <img src="left.png" alt="左の画像" />
+      </div>
+
+      <div class="form-side">
+        <label>平均出玉</label>
+        <input type="number" id="avgOutput" />
+
+        <label>平均投資玉</label>
+        <input type="number" id="avgInput" />
+
+        <label>大当たり確率</label>
+        <input type="number" id="probability" />
+
+        <label>総回転数</label>
+        <input type="number" id="spins" />
+
+        <button onclick="calculate()">計算する！</button>
+
+        <div class="result" id="result">← PC画面に表示されます</div>
+      </div>
+
+      <div class="image-side">
+        <img src="right.png" alt="右の画像" />
+      </div>
     </div>
+  </div>
 
-    <!-- 中央フォーム -->
-    <div class="form-side">
-      <label>平均出玉</label>
-      <input type="number" id="avgOutput" />
+  <!-- 📱 スマホ専用 -->
+  <div class="mobile-only">
+    <div class="main" style="flex-direction: column; align-items: center;">
+      <img src="left.png" alt="スマホ用画像" style="width: 70%; border-radius: 12px;" />
 
-      <label>平均投資玉</label>
-      <input type="number" id="avgInput" />
+      <div class="form-side" style="width: 100%;">
+        <label>平均出玉</label>
+        <input type="number" id="avgOutputSP" />
 
-      <label>大当たり確率</label>
-      <input type="number" id="probability" />
+        <label>平均投資玉</label>
+        <input type="number" id="avgInputSP" />
 
-      <label>総回転数</label>
-      <input type="number" id="spins" />
+        <label>大当たり確率</label>
+        <input type="number" id="probabilitySP" />
 
-      <button onclick="calculate()">計算する！</button>
+        <label>総回転数</label>
+        <input type="number" id="spinsSP" />
 
-      <div class="result" id="result">← ここに結果が出ます</div>
-    </div>
+        <button onclick="calculateSP()">スマホで計算！</button>
 
-    <!-- 右画像 -->
-    <div class="image-side">
-      <img src="right.png" alt="右の画像" />
+        <div class="result" id="resultSP">← スマホ画面に表示されます</div>
+      </div>
+
+      <img src="right.png" alt="スマホ用画像" style="width: 70%; border-radius: 12px;" />
     </div>
   </div>
 
@@ -134,6 +181,21 @@
 
       const expectedValue = ((avgOutput - avgInput) / probability) * spins;
       document.getElementById("result").textContent = `期待値：${expectedValue.toFixed(2)}玉`;
+    }
+
+    function calculateSP() {
+      const avgOutput = parseFloat(document.getElementById("avgOutputSP").value);
+      const avgInput = parseFloat(document.getElementById("avgInputSP").value);
+      const probability = parseFloat(document.getElementById("probabilitySP").value);
+      const spins = parseFloat(document.getElementById("spinsSP").value);
+
+      if (isNaN(avgOutput) || isNaN(avgInput) || isNaN(probability) || isNaN(spins)) {
+        document.getElementById("resultSP").textContent = "全ての項目を入力してね！";
+        return;
+      }
+
+      const expectedValue = ((avgOutput - avgInput) / probability) * spins;
+      document.getElementById("resultSP").textContent = `期待値：${expectedValue.toFixed(2)}玉`;
     }
   </script>
 </body>
