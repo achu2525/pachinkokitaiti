@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>期待値計算ツール</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-image: url("background.jpg"); /* ←背景画像をここで指定！ */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #333;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff69b4;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 12px;
+      max-width: 500px;
+      margin: 0 auto 20px;
+    }
+
+    .main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.9); /* 背景を少し透けさせる */
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .image-side img {
+      width: 200px;
+      border-radius: 12px;
+    }
+
+    .form-side {
+      flex: 1;
+      max-width: 400px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      background-color: #ffb6c1;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ff85a2;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      text-align: center;
+      color: #d63384;
+    }
+  </style>
+</head>
+<body>
+  <h1>期待値計算ツール</h1>
+  <div class="main">
+    <!-- 左画像 -->
+    <div class="image-side">
+      <img src="left.png" alt="左の画像" />
+    </div>
+
+    <!-- 中央フォーム -->
+    <div class="form-side">
+      <label>平均出玉</label>
+      <input type="number" id="avgOutput" />
+
+      <label>平均投資玉</label>
+      <input type="number" id="avgInput" />
+
+      <label>大当たり確率</label>
+      <input type="number" id="probability" />
+
+      <label>総回転数</label>
+      <input type="number" id="spins" />
+
+      <button onclick="calculate()">計算する！</button>
+
+      <div class="result" id="result">← ここに結果が出ます</div>
+    </div>
+
+    <!-- 右画像 -->
+    <div class="image-side">
+      <img src="right.png" alt="右の画像" />
+    </div>
+  </div>
+
+  <script>
+    function calculate() {
+      const avgOutput = parseFloat(document.getElementById("avgOutput").value);
+      const avgInput = parseFloat(document.getElementById("avgInput").value);
+      const probability = parseFloat(document.getElementById("probability").value);
+      const spins = parseFloat(document.getElementById("spins").value);
+
+      if (isNaN(avgOutput) || isNaN(avgInput) || isNaN(probability) || isNaN(spins)) {
+        document.getElementById("result").textContent = "全ての項目を入力してね！";
+        return;
+      }
+
+      const expectedValue = ((avgOutput - avgInput) / probability) * spins;
+      document.getElementById("result").textContent = `期待値：${expectedValue.toFixed(2)}玉`;
+    }
+  </script>
+</body>
+</html>
